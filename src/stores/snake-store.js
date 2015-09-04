@@ -1,13 +1,14 @@
 import { UP, DOWN, LEFT, RIGHT } from '../constants'
 
-import alt from '../alt';
 import SnakeActions from './snake-actions'
 import TimingActions from './timing-actions'
+
+import { store } from '../alt';
 
 const WIDTH = 21
 const HEIGHT = 21
 
-@alt.createStore
+@store('SnakeStore')
 export default class SnakeStore {
     constructor() {
         this.state = {

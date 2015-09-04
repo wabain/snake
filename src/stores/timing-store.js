@@ -1,9 +1,9 @@
-import alt from '../alt'
 import TimingActions from './timing-actions'
-
 import SnakeStore from './snake-store'
 
-@alt.createStore
+import { store } from '../alt'
+
+@store('TimingStore')
 export default class TimingStore {
     constructor() {
         this.bindActions(TimingActions)

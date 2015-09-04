@@ -13,6 +13,7 @@
   },
   "scripts": {
     "build": "webpack --config webpack.conf.js",
+    "build:production": "webpack --config webpack.production.conf.js",
     "watch": "webpack --watch --config webpack.conf.js"
   },
   "author": "William Bain <bain.william.a@gmail.com>",
