@@ -1,7 +1,7 @@
 import React from 'react'
 import connectToStores from 'alt/utils/connectToStores'
 
-import { INITIAL_DURATION, DECAY_RATE } from '../constants'
+import { INITIAL_WAIT_TICKS, WAIT_DECAY_RATE, TICK_DURATION } from '../constants'
 
 import alt from '../alt'
 import TimingStore from '../stores/timing-store'
@@ -74,16 +74,16 @@ export default class App extends React.Component {
     }
 
     _triggerTick(expectedTicks) {
-        // TODO: better duration function
-        const duration = Math.max(INITIAL_DURATION - expectedTicks * DECAY_RATE, 50)
+        const waitTicks = Math.max(1, Math.round(INITIAL_WAIT_TICKS - expectedTicks * WAIT_DECAY_RATE))
+        const timeoutDuration = waitTicks * TICK_DURATION
 
         const timeout = setTimeout(() => {
             if (this.props.timing.active && this.props.timing.ticks === expectedTicks) {
-                TimingActions.tick()
+                TimingActions.tick(waitTicks)
             }
 
             this._timeout = null
-        }, duration)
+        }, timeoutDuration)
 
         this._timeout = timeout
     }

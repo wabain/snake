@@ -28,12 +28,12 @@ export default class TimingStore {
         this.setState({ active: false, terminated: true })
     }
 
-    onTick() {
+    onTick(ticks) {
         this.waitFor(SnakeStore.dispatchToken)
 
         if (SnakeStore.getState().collided)
             this.setState({ active: false, terminated: true })
         else
-            this.setState({ ticks: this.state.ticks + 1 })
+            this.setState({ ticks: this.state.ticks + ticks })
     }
 }
