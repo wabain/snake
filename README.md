@@ -2,4 +2,11 @@ A Snake game, written as an exercise in Flux and React.
 
 # Setup
 
-Execute `npm run build` and open `index.html`.
+Build the JavaScript sources:
+
+```sh
+$ npm install --dev
+$ npm run build
+```
+
+Then open `index.html`.
