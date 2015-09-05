@@ -38,8 +38,8 @@ export default class Controls extends React.Component {
         }
 
         return (
-            <div>
-                <button type="button" onClick={handler}>
+            <div className="controls">
+                <button className="btn" type="button" onClick={handler}>
                     {message}
                 </button>
             </div>
