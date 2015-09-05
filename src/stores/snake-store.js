@@ -67,7 +67,7 @@ export default class SnakeStore {
     }
 
     _loadInitialFood() {
-        for (let i=0; i < 5; i++) {
+        for (let i=0; i < 10; i++) {
             // Mutate the state in place because we're only doing this during initialization
             this.state.food.push(this._getFoodPiece())
         }
