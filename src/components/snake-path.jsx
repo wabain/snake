@@ -1,6 +1,13 @@
 import React from 'react'
+import snakeProps from '../prop-types/snake'
 
 export default class SnakePath extends React.Component {
+    static get propTypes() {
+        return {
+            snake: snakeProps.isRequired
+        }
+    }
+
     render() {
         const coords = this._getCoordinates()
 

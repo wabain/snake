@@ -1,5 +1,7 @@
 import React from 'react'
 
+import timingProps from '../prop-types/timing'
+
 import alt from '../alt'
 import TimingActions from '../stores/timing-actions'
 
@@ -8,6 +10,12 @@ import TimingActions from '../stores/timing-actions'
  * TODO: add help here?
  */
 export default class Controls extends React.Component {
+    static get propTypes() {
+        return {
+            timing: timingProps
+        }
+    }
+
     render() {
         let handler, message
 

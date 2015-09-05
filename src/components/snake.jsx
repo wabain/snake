@@ -1,9 +1,17 @@
 import React from 'react'
 
+import snakeProps from '../prop-types/snake'
+
 import SnakePath from './snake-path.jsx'
 import SnakeFood from './snake-food.jsx'
 
 export default class Snake extends React.Component {
+    static get propTypes() {
+        return {
+            snake: snakeProps.isRequired
+        }
+    }
+
     render() {
         const { width: hBoxes, height: vBoxes } = this.props.snake.container
 
