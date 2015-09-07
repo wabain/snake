@@ -26,7 +26,7 @@ export default class Snake extends React.Component {
         const grid = this.props.showGrid ? this._getGrid() : null
 
         return (
-            <svg {...attributes}>
+            <svg version="1.1" xmlns="http://www.w3.org/2000/svg" {...attributes}>
                 <SnakePath {...this.props} />
                 { food }
                 { grid }
