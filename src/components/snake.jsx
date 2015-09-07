@@ -1,4 +1,5 @@
 import React from 'react'
+import CSSTransitionGroup from 'react/lib/ReactCSSTransitionGroup'
 
 import snakeProps from '../prop-types/snake'
 
@@ -15,21 +16,35 @@ export default class Snake extends React.Component {
     render() {
         const { width: hBoxes, height: vBoxes } = this.props.snake.container
 
+        const x = '-0.5'
+        const y = '-0.5'
+
         const attributes = {
             height: hBoxes * this.props.boxSize,
             width: vBoxes * this.props.boxSize,
-            viewBox: `-0.5 -0.5 ${hBoxes} ${vBoxes}`,
+            viewBox: `${x} ${y} ${hBoxes} ${vBoxes}`,
             style: { background: 'black', ...this.props.style }
         }
 
         const food = this.props.snake.food.map(({ x, y }, i) => <SnakeFood key={i} x={x} y={y} />)
         const grid = this.props.showGrid ? this._getGrid() : null
 
+        // Fade out the overlay when the game ends
+        let overlay
+        if (this.props.snake.collided) {
+            overlay = <rect key="overlay" className="overlay" x={x} y={y} width={hBoxes} height={vBoxes} />
+        } else {
+            overlay = null
+        }
+
         return (
             <svg version="1.1" xmlns="http://www.w3.org/2000/svg" {...attributes}>
                 <SnakePath {...this.props} />
                 { food }
                 { grid }
+                <CSSTransitionGroup transitionName="gameover" transitionLeave={false} component="g">
+                    {overlay}
+                </CSSTransitionGroup>
             </svg>
         )
     }
