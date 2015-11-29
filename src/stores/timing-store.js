@@ -1,3 +1,5 @@
+import { READY, ACTIVE, PAUSED, TERMINATED } from '../constants'
+
 import TimingActions from './timing-actions'
 import SnakeStore from './snake-store'
 
@@ -9,30 +11,29 @@ export default class TimingStore {
         this.bindActions(TimingActions)
 
         this.state = {
-            started: false,
-            terminated: false,
-            active: false,
+            timer: READY,
             ticks: 0
         }
     }
 
+    // TODO: Enforce state transitions?
     onStart() {
-        this.setState({ started: true, active: true })
+        this.setState({ timer: ACTIVE })
     }
 
     onPause() {
-        this.setState({ active: false })
+        this.setState({ timer: PAUSED })
     }
 
     onTerminate() {
-        this.setState({ active: false, terminated: true })
+        this.setState({ timer: TERMINATED })
     }
 
     onTick(ticks) {
         this.waitFor(SnakeStore.dispatchToken)
 
         if (SnakeStore.getState().collided)
-            this.setState({ active: false, terminated: true })
+            this.setState({ timer: TERMINATED })
         else
             this.setState({ ticks: this.state.ticks + ticks })
     }

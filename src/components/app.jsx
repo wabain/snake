@@ -1,7 +1,12 @@
 import React from 'react'
 import connectToStores from 'alt/utils/connectToStores'
 
-import { INITIAL_WAIT_TICKS, WAIT_DECAY_RATE, TICK_DURATION } from '../constants'
+import {
+    INITIAL_WAIT_TICKS, WAIT_DECAY_RATE, TICK_DURATION,
+
+    // Timer states
+    ACTIVE, TERMINATED
+} from '../constants'
 
 import alt from '../alt'
 import TimingStore from '../stores/timing-store'
@@ -41,15 +46,15 @@ export default class App extends React.Component {
     }
 
     componentWillReceiveProps(nextProps) {
-        const timing = this.props.timing
-        const nextTiming = nextProps.timing
+        const { timer, ticks } = this.props.timing
+        const { timer: nextTimer, ticks: nextTicks } = nextProps.timing
 
         // Start the timeout for the next tick whenever the timingis activated or the tick
         // increments
         // FIXME: is there a better place to do this?
-        if ((!timing.active && nextTiming.active) || timing.ticks !== nextTiming.ticks) {
-            this._triggerTick(nextTiming.ticks)
-        } else if (this.props.timing.active && !nextProps.timing.active && this._timeout !== null) {
+        if (ticks !== nextTicks || (timer !== ACTIVE && nextTimer === ACTIVE)) {
+            this._triggerTick(nextTicks)
+        } else if (timer === ACTIVE && nextTimer !== ACTIVE && this._timeout !== null) {
             clearTimeout(this._timeout)
             this._timeout = null
         }
@@ -68,16 +73,18 @@ export default class App extends React.Component {
     _handleKeydown(e) {
         let arrowDirection
 
-        if (this.props.timing.active && (arrowDirection = getArrowDirection(e.key))) {
+        const timerState = this.props.timing.timer
+
+        if (timerState === ACTIVE && (arrowDirection = getArrowDirection(e.key))) {
             // If an arrow key is pressed set the direction
             SnakeActions.setDirection(arrowDirection)
             e.preventDefault()
         } else if (e.key === 'Enter' || e.key === ' ') {
             // Start/stop the game when the space bar or enter key are pressed
-            if (this.props.timing.active) {
+            if (timerState === ACTIVE) {
                 TimingActions.pause()
             } else {
-                if (this.props.timing.terminated) alt.recycle()
+                if (timerState === TERMINATED) alt.recycle()
 
                 TimingActions.start()
             }
@@ -91,7 +98,7 @@ export default class App extends React.Component {
         const timeoutDuration = waitTicks * TICK_DURATION
 
         const timeout = setTimeout(() => {
-            if (this.props.timing.active && this.props.timing.ticks === expectedTicks) {
+            if (this.props.timing.timer === ACTIVE && this.props.timing.ticks === expectedTicks) {
                 TimingActions.tick(waitTicks)
             }
 

@@ -10,3 +10,8 @@ export const LEFT = 'left'
 export const UP = 'up'
 export const RIGHT = 'right'
 export const DOWN = 'down'
+
+export const READY = 'ready'
+export const ACTIVE = 'active'
+export const PAUSED = 'paused'
+export const TERMINATED = 'terminated'

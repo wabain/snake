@@ -1,8 +1,8 @@
+import { READY, ACTIVE, PAUSED, TERMINATED } from '../constants'
+
 import { PropTypes } from 'react'
 
 export default PropTypes.shape({
-    started: PropTypes.bool.isRequired,
-    terminated: PropTypes.bool.isRequired,
-    active: PropTypes.bool.isRequired,
+    timer: PropTypes.oneOf([READY, ACTIVE, PAUSED, TERMINATED]),
     ticks: PropTypes.number.isRequired
 })
