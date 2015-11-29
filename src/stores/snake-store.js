@@ -23,6 +23,7 @@ export default class SnakeStore {
 
         this.bindActions(SnakeActions)
         this.bindAction(TimingActions.TICK, this.onTick)
+        this.bindAction(TimingActions.RESUME_GAME, this.onResumeGame)
     }
 
     onSetDirection(direction) {
@@ -64,6 +65,10 @@ export default class SnakeStore {
 
             this.setState({ food: food, coordinates: coordinates })
         }
+    }
+
+    onResumeGame() {
+        this.setState({ collided: false })
     }
 
     _loadInitialFood() {

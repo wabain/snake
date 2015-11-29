@@ -90,6 +90,12 @@ export default class App extends React.Component {
             }
 
             e.preventDefault()
+        } else if (e.key === 'M' && e.shiftKey) {
+            // Secret feature: Continue game on Shift+M
+            if (this.props.snake.collided)
+                TimingActions.resumeGame()
+
+            e.preventDefault()
         }
     }
 
