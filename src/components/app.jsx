@@ -13,6 +13,17 @@ import TimingActions from '../stores/timing-actions'
 import Snake from './snake.jsx'
 import Controls from './controls.jsx'
 
+const ARROW_KEYS_REGEX = /^Arrow(Up|Down|Left|Right)$/
+
+function getArrowDirection(key) {
+    const parsed = ARROW_KEYS_REGEX.exec(key)
+
+    if (!parsed)
+        return null
+
+    return parsed[1].toLowerCase()
+}
+
 @connectToStores
 export default class App extends React.Component {
     constructor() {
@@ -55,11 +66,13 @@ export default class App extends React.Component {
     }
 
     _handleKeydown(e) {
-        if (this.props.timing.active && 37 <= e.keyCode && e.keyCode <= 40) {
+        let arrowDirection
+
+        if (this.props.timing.active && (arrowDirection = getArrowDirection(e.key))) {
             // If an arrow key is pressed set the direction
-            SnakeActions.setDirection(e.keyCode)
+            SnakeActions.setDirection(arrowDirection)
             e.preventDefault()
-        } else if (e.keyCode === 13 || e.keyCode === 32) {
+        } else if (e.key === 'Enter' || e.key === ' ') {
             // Start/stop the game when the space bar or enter key are pressed
             if (this.props.timing.active) {
                 TimingActions.pause()
