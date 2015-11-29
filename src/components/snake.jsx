@@ -42,7 +42,7 @@ export default class Snake extends React.Component {
                 <SnakePath {...this.props} />
                 { food }
                 { grid }
-                <CSSTransitionGroup transitionName="gameover" transitionLeave={false} component="g">
+                <CSSTransitionGroup transitionName="gameover" transitionEnterTimeout={500} transitionLeave={false} component="g">
                     {overlay}
                 </CSSTransitionGroup>
             </svg>
