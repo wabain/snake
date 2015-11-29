@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { PropTypes } from 'react'
 import CSSTransitionGroup from 'react/lib/ReactCSSTransitionGroup'
 
 import snakeProps from '../prop-types/snake'
@@ -27,7 +27,7 @@ export default class Snake extends React.Component {
         }
 
         const food = this.props.snake.food.map(({ x, y }, i) => <SnakeFood key={i} x={x} y={y} />)
-        const grid = this.props.showGrid ? this._getGrid() : null
+        const grid = this.props.showGrid ? <Grid width={vBoxes} height={hBoxes} boxSize={this.props.boxSize} /> : null
 
         // Fade out the overlay when the game ends
         let overlay
@@ -48,26 +48,30 @@ export default class Snake extends React.Component {
             </svg>
         )
     }
+}
 
-    /** Grid for debugging */
-    _getGrid() {
-        const { width, height } = this.props.snake.container
-        const grid = []
+/** Grid for debugging */
+export function Grid({ width, height, boxSize }) {
+    const strokeWidth = 1 / boxSize
+    const grid = []
 
-        for (let i=0; i <= height; i++) {
-            const x = i - 0.5
-            grid.push(this._getGridLine(grid.length, {x1: x, y1: -0.5, x2: x, y2: height + 0.5}))
-        }
-
-        for (let i=0; i <= width; i++) {
-            const y = i - 0.5
-            grid.push(this._getGridLine(grid.length, {x1: -0.5, y1: y, x2: height + 0.5, y2: y}))
-        }
-
-        return grid
+    for (let i=0; i <= height; i++) {
+        const x = i - 0.5
+        grid.push(<line key={grid.length} stroke="white" strokeWidth={strokeWidth}
+                        x1={x} y1={-0.5} x2={x} y2={height + 0.5} />)
     }
 
-    _getGridLine(key, coords) {
-        return <line key={key} stroke="white" strokeWidth={1/this.props.boxSize} {...coords} />
+    for (let i=0; i <= width; i++) {
+        const y = i - 0.5
+        grid.push(<line key={grid.length} stroke="white" strokeWidth={strokeWidth}
+                        x1={-0.5} y1={y} x2={height + 0.5} y2={y} />)
     }
+
+    return <g>{grid}</g>
+}
+
+Grid.propTypes = {
+    width: PropTypes.number.isRequired,
+    height: PropTypes.number.isRequired,
+    boxSize: PropTypes.number.isRequired
 }
