@@ -24,7 +24,7 @@ export default class Snake extends React.Component {
             height: hBoxes * this.props.boxSize,
             width: vBoxes * this.props.boxSize,
             viewBox: `${x} ${y} ${hBoxes} ${vBoxes}`,
-            style: { background: 'black', ...this.props.style }
+            style: Object.assign({ background: 'black' }, this.props.style)
         }
 
         const food = this.props.snake.food.map(({ x, y }, i) => (

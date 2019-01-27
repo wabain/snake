@@ -7,12 +7,11 @@ module.exports = {
     },
 
     module: {
-        loaders: [
+        rules: [
             {
                 test: /\.js(x?)$/,
-                loader: 'babel',
-                exclude: /node_modules/,
-                query: { optional: ['es7.decorators'] }
+                use: 'babel-loader',
+                exclude: /node_modules/
             }
         ]
     }
