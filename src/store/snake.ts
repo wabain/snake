@@ -4,7 +4,7 @@ import { Action, SET_DIRECTION, TICK, START, RESUME_GAME } from './actions'
 const WIDTH = 21
 const HEIGHT = 21
 
-type Coordinate = { x: number; y: number }
+export type Coordinate = { x: number; y: number }
 
 export type SnakeState = {
     container: {

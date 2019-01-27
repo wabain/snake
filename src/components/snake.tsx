@@ -1,10 +1,7 @@
 import React from 'react'
 import { CSSTransition } from 'react-transition-group'
 
-import { SnakeState } from '../store/snake'
-
-import SnakePath from './snake-path'
-import SnakeFood from './snake-food'
+import { SnakeState, Coordinate } from '../store/snake'
 
 export type SnakeProps = {
     snake: SnakeState
@@ -60,6 +57,36 @@ export default class Snake extends React.Component<SnakeProps> {
             </svg>
         )
     }
+}
+
+function SnakeFood({ x, y }: Coordinate) {
+    const coords = `M${x},${y} l0,0`
+    return (
+        <path
+            d={coords}
+            stroke="white"
+            strokeWidth={1}
+            strokeLinecap="square"
+        />
+    )
+}
+
+function SnakePath({ snake }: { snake: SnakeState }) {
+    const coords = getSnakePathCoordinates(snake.coordinates)
+    return (
+        <path d={coords} stroke="red" strokeWidth={1} strokeLinecap="square" />
+    )
+}
+
+function getSnakePathCoordinates(coords: Coordinate[]): string {
+    if (coords.length === 1) {
+        const { x, y } = coords[0]
+        return `M${x},${y} l0,0`
+    }
+
+    return coords
+        .map(({ x, y }, i) => `${i === 0 ? 'M' : 'L'}${x},${y}`)
+        .join(' ')
 }
 
 /** Grid for debugging */
