@@ -1,7 +1,7 @@
 module.exports = {
     mode: 'development',
 
-    entry: __dirname + '/src/index.jsx',
+    entry: __dirname + '/src/index.tsx',
 
     output: {
         path: __dirname + '/dist/',
