@@ -1,4 +1,6 @@
 module.exports = {
+    mode: 'development',
+
     entry: __dirname + '/src/index.jsx',
 
     output: {
