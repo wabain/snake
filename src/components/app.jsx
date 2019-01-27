@@ -1,5 +1,5 @@
 import React from 'react'
-import connectToStores from 'alt/utils/connectToStores'
+import { connect } from 'react-redux'
 
 import {
     INITIAL_WAIT_TICKS,
@@ -11,12 +11,13 @@ import {
     TERMINATED
 } from '../constants'
 
-import alt from '../alt'
-import TimingStore from '../stores/timing-store'
-import SnakeStore from '../stores/snake-store'
-
-import SnakeActions from '../stores/snake-actions'
-import TimingActions from '../stores/timing-actions'
+import {
+    SET_DIRECTION,
+    TICK,
+    START,
+    PAUSE,
+    RESUME_GAME
+} from '../store/actions'
 
 import Snake from './snake.jsx'
 import Controls from './controls.jsx'
@@ -31,20 +32,31 @@ function getArrowDirection(key) {
     return parsed[1].toLowerCase()
 }
 
-@connectToStores
+@connect(
+    ({ timing, snake }) => ({ timing, snake }),
+    dispatch => ({
+        setDirection: direction => {
+            dispatch({ type: SET_DIRECTION, payload: { direction } })
+        },
+        tick: ticks => {
+            dispatch({ type: TICK, payload: { ticks } })
+        },
+        start: () => {
+            dispatch({ type: START, payload: {} })
+        },
+        pause: () => {
+            dispatch({ type: PAUSE, payload: {} })
+        },
+        resumeGame: () => {
+            dispatch({ type: RESUME_GAME, payload: {} })
+        }
+    })
+)
 export default class App extends React.Component {
     constructor() {
         super()
         // Don't put the timeout in state because setting/unsetting it shouldn't trigger a rerender
         this._timeout = null
-    }
-
-    static getStores() {
-        return [TimingStore, SnakeStore]
-    }
-
-    static getPropsFromStores() {
-        return { timing: TimingStore.getState(), snake: SnakeStore.getState() }
     }
 
     componentWillReceiveProps(nextProps) {
@@ -86,25 +98,21 @@ export default class App extends React.Component {
             (arrowDirection = getArrowDirection(e.key))
         ) {
             // If an arrow key is pressed set the direction
-            SnakeActions.setDirection(arrowDirection)
+            this.props.setDirection(arrowDirection)
             e.preventDefault()
         } else if (e.key === 'Enter' || e.key === ' ') {
             // Start/stop the game when the space bar or enter key are pressed
             if (timerState === ACTIVE) {
-                TimingActions.pause()
+                this.props.pause()
             } else {
-                if (timerState === TERMINATED) {
-                    alt.recycle()
-                }
-
-                TimingActions.start()
+                this.props.start()
             }
 
             e.preventDefault()
         } else if (e.key === 'M' && e.shiftKey) {
             // Secret feature: Continue game on Shift+M
             if (this.props.snake.collided) {
-                TimingActions.resumeGame()
+                this.props.resumeGame()
             }
 
             e.preventDefault()
@@ -123,7 +131,7 @@ export default class App extends React.Component {
                 this.props.timing.timer === ACTIVE &&
                 this.props.timing.ticks === expectedTicks
             ) {
-                TimingActions.tick(waitTicks)
+                this.props.tick(waitTicks)
             }
 
             this._timeout = null

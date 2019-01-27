@@ -4,10 +4,8 @@ import { READY, ACTIVE, PAUSED, TERMINATED } from '../constants'
 
 import timingProps from '../prop-types/timing'
 
-import alt from '../alt'
-import TimingActions from '../stores/timing-actions'
-
-/** Expose controls
+/**
+ * Expose controls
  *
  * TODO: add help here?
  */
@@ -23,26 +21,22 @@ export default class Controls extends React.Component {
 
         switch (this.props.timing.timer) {
             case READY:
-                handler = () => TimingActions.start()
+                handler = this.props.start
                 message = 'Start'
                 break
 
             case ACTIVE:
-                handler = () => TimingActions.pause()
+                handler = this.props.pause
                 message = 'Pause'
                 break
 
             case PAUSED:
-                handler = () => TimingActions.start()
+                handler = this.props.start
                 message = 'Unpause'
                 break
 
             case TERMINATED:
-                // Throw all the state away
-                handler = () => {
-                    alt.recycle()
-                    TimingActions.start()
-                }
+                handler = this.props.start
                 message = 'New game'
                 break
 
