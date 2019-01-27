@@ -5,8 +5,8 @@ A Snake game, written as an exercise in Flux and React.
 Build the JavaScript sources:
 
 ```sh
-$ npm install --dev
-$ npm run build
+$ yarn install
+$ yarn run build:production
 ```
 
 Then open `index.html`.
