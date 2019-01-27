@@ -1,12 +1,21 @@
 import { READY, ACTIVE, PAUSED, TERMINATED } from '../constants'
-import { START, PAUSE, TICK, TERMINATE, RESUME_GAME } from './actions'
+import { Action, START, PAUSE, TICK, TERMINATE, RESUME_GAME } from './actions'
+
+export type TimingState = {
+    timer: string // XXX
+    ticks: number
+}
 
 const initialState = {
     timer: READY,
     ticks: 0
 }
 
-export default function reduceTiming(state = initialState, action, isGameOver) {
+export default function reduceTiming(
+    state: TimingState | undefined = initialState,
+    action: Action,
+    isGameOver: boolean
+) {
     switch (action.type) {
         // TODO: Enforce state transitions?
         case START:

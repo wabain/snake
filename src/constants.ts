@@ -6,10 +6,12 @@ export const TICK_DURATION = 50
 // Decay rate of wait between updates in ticks given prior ticks
 export const WAIT_DECAY_RATE = 1 / 50
 
-export const LEFT = 'left'
-export const UP = 'up'
-export const RIGHT = 'right'
-export const DOWN = 'down'
+export type Direction = 'left' | 'up' | 'right' | 'down'
+
+export const LEFT: Direction = 'left'
+export const UP: Direction = 'up'
+export const RIGHT: Direction = 'right'
+export const DOWN: Direction = 'down'
 
 export const READY = 'ready'
 export const ACTIVE = 'active'

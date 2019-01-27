@@ -8,11 +8,20 @@ module.exports = {
         filename: 'snake.js'
     },
 
+    resolve: {
+        extensions: ['.tsx', '.ts', '.jsx', '.js']
+    },
+
     module: {
         rules: [
             {
-                test: /\.js(x?)$/,
+                test: /\.jsx?$/,
                 use: 'babel-loader',
+                exclude: /node_modules/
+            },
+            {
+                test: /\.tsx?$/,
+                loader: 'ts-loader',
                 exclude: /node_modules/
             }
         ]

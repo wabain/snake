@@ -1,10 +1,24 @@
-import { UP, DOWN, LEFT, RIGHT } from '../constants'
-import { SET_DIRECTION, TICK, START, RESUME_GAME } from './actions'
+import { Direction, UP, DOWN, LEFT, RIGHT } from '../constants'
+import { Action, SET_DIRECTION, TICK, START, RESUME_GAME } from './actions'
 
 const WIDTH = 21
 const HEIGHT = 21
 
-const initialGameState = {
+type Coordinate = { x: number; y: number }
+
+export type SnakeState = {
+    container: {
+        width: number
+        height: number
+    }
+    collided: boolean
+    started: boolean
+    direction: Direction
+    coordinates: Coordinate[]
+    food: Coordinate[]
+}
+
+const initialState: SnakeState = {
     container: { width: WIDTH, height: HEIGHT },
     collided: false,
     started: false,
@@ -16,10 +30,13 @@ const initialGameState = {
 /*
  * TODO: Make this deterministic by factoring out randomness of getFoodPiece
  */
-export default function reduceSnake(state, action) {
+export default function reduceSnake(
+    state: SnakeState | undefined,
+    action: Action
+): SnakeState {
     if (!state) {
         // Load an initialized game by default
-        state = Object.assign({}, initialGameState, { started: true })
+        state = Object.assign({}, initialState, { started: true })
         loadInitialFood(state)
     }
 
@@ -33,7 +50,7 @@ export default function reduceSnake(state, action) {
 
         case START:
             if (state.collided || !state.started) {
-                state = Object.assign({}, initialGameState, { started: true })
+                state = Object.assign({}, initialState, { started: true })
                 loadInitialFood(state)
             }
             return state
@@ -48,7 +65,7 @@ export default function reduceSnake(state, action) {
     }
 }
 
-function loadInitialFood(state) {
+function loadInitialFood(state: SnakeState) {
     state.food = []
     for (let i = 0; i < 10; i++) {
         // Mutate the state in place because we're only doing this during initialization
@@ -56,7 +73,7 @@ function loadInitialFood(state) {
     }
 }
 
-function handleTick(state) {
+function handleTick(state: SnakeState) {
     let { container, coordinates, direction } = state
 
     // Get the coordinates shifted one tick in the direction
@@ -98,7 +115,7 @@ function handleTick(state) {
     }
 }
 
-function getFoodPiece({ container, coordinates, food }) {
+function getFoodPiece({ container, coordinates, food }: SnakeState) {
     // Keep iterating until we get coordinates which aren't used for something else
     for (;;) {
         const x = Math.floor(Math.random() * container.width)
@@ -116,7 +133,7 @@ function getFoodPiece({ container, coordinates, food }) {
     }
 }
 
-function getIncrementedCoords({ x, y }, direction) {
+function getIncrementedCoords({ x, y }: Coordinate, direction: Direction) {
     switch (direction) {
         case UP:
             y--

@@ -1,3 +1,5 @@
+export type Action = { type: string; payload: any }
+
 export const SET_DIRECTION = 'setDirection'
 export const START = 'start'
 export const PAUSE = 'pause'
