@@ -1,7 +1,12 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
-export default class SnakeFood extends React.Component {
+export type SnakeFoodProps = {
+    x: number
+    y: number
+}
+
+export default class SnakeFood extends React.Component<SnakeFoodProps> {
     static get propTypes() {
         return {
             x: PropTypes.number.isRequired,

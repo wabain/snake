@@ -1,12 +1,12 @@
-import { READY, ACTIVE, PAUSED, TERMINATED } from '../constants'
+import { TimerState, READY, ACTIVE, PAUSED, TERMINATED } from '../constants'
 import { Action, START, PAUSE, TICK, TERMINATE, RESUME_GAME } from './actions'
 
 export type TimingState = {
-    timer: string // XXX
+    timer: TimerState
     ticks: number
 }
 
-const initialState = {
+const initialState: TimingState = {
     timer: READY,
     ticks: 0
 }

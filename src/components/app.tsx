@@ -8,7 +8,8 @@ import {
 
     // Timer states
     ACTIVE,
-    TERMINATED
+    TERMINATED,
+    Direction
 } from '../constants'
 
 import {
@@ -18,23 +19,38 @@ import {
     PAUSE,
     RESUME_GAME
 } from '../store/actions'
+import { StoreState } from '../store/index'
+import { SnakeState } from '../store/snake'
+import { TimingState } from '../store/timing'
 
-import Snake from './snake.jsx'
-import Controls from './controls.jsx'
+import Snake from './snake'
+import Controls from './controls'
+
+export type DispatchCallbacks = {
+    setDirection: (d: Direction) => void
+    tick: (t: number) => void
+    start: () => void
+    pause: () => void
+    resumeGame: () => void
+}
+
+export type AppPropTypes = DispatchCallbacks & {
+    snake: SnakeState
+    timing: TimingState
+}
 
 const ARROW_KEYS_REGEX = /^Arrow(Up|Down|Left|Right)$/
 
-function getArrowDirection(key) {
+function getArrowDirection(key: string): Direction | null {
     const parsed = ARROW_KEYS_REGEX.exec(key)
 
     if (!parsed) return null
 
-    return parsed[1].toLowerCase()
+    return parsed[1].toLowerCase() as Direction
 }
 
-@connect(
-    ({ timing, snake }) => ({ timing, snake }),
-    dispatch => ({
+function bindDispatch(dispatch: any): DispatchCallbacks {
+    return {
         setDirection: direction => {
             dispatch({ type: SET_DIRECTION, payload: { direction } })
         },
@@ -50,16 +66,19 @@ function getArrowDirection(key) {
         resumeGame: () => {
             dispatch({ type: RESUME_GAME, payload: {} })
         }
-    })
-)
-export default class App extends React.Component {
-    constructor() {
-        super()
+    }
+}
+
+class App extends React.Component<AppPropTypes> {
+    _timeout: number | null
+
+    constructor(props: AppPropTypes) {
+        super(props)
         // Don't put the timeout in state because setting/unsetting it shouldn't trigger a rerender
         this._timeout = null
     }
 
-    componentWillReceiveProps(nextProps) {
+    componentWillReceiveProps(nextProps: AppPropTypes) {
         const { timer, ticks } = this.props.timing
         const { timer: nextTimer, ticks: nextTicks } = nextProps.timing
 
@@ -88,8 +107,8 @@ export default class App extends React.Component {
         )
     }
 
-    _handleKeydown(e) {
-        let arrowDirection
+    _handleKeydown(e: React.KeyboardEvent) {
+        let arrowDirection: Direction
 
         const timerState = this.props.timing.timer
 
@@ -119,7 +138,7 @@ export default class App extends React.Component {
         }
     }
 
-    _triggerTick(expectedTicks) {
+    _triggerTick(expectedTicks: number) {
         const waitTicks = Math.max(
             1,
             Math.round(INITIAL_WAIT_TICKS - expectedTicks * WAIT_DECAY_RATE)
@@ -140,3 +159,8 @@ export default class App extends React.Component {
         this._timeout = timeout
     }
 }
+
+export default connect(
+    ({ timing, snake }: StoreState) => ({ timing, snake }),
+    bindDispatch
+)(App)

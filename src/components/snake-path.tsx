@@ -1,7 +1,12 @@
 import React from 'react'
 import snakeProps from '../prop-types/snake'
+import { SnakeState } from '../store/snake'
 
-export default class SnakePath extends React.Component {
+export type SnakePathProps = {
+    snake: SnakeState
+}
+
+export default class SnakePath extends React.Component<SnakePathProps> {
     static get propTypes() {
         return {
             snake: snakeProps.isRequired

@@ -1,15 +1,23 @@
 import React from 'react'
 
-import { READY, ACTIVE, PAUSED, TERMINATED } from '../constants'
+import { READY, ACTIVE, PAUSED, TERMINATED, assertNever } from '../constants'
+import { TimingState } from '../store/timing'
 
 import timingProps from '../prop-types/timing'
+
+// XXX Circular?
+import { DispatchCallbacks } from './app'
+
+export type ControlsProps = {
+    timing: TimingState
+} & DispatchCallbacks
 
 /**
  * Expose controls
  *
  * TODO: add help here?
  */
-export default class Controls extends React.Component {
+export default class Controls extends React.Component<ControlsProps> {
     static get propTypes() {
         return {
             timing: timingProps
@@ -41,9 +49,7 @@ export default class Controls extends React.Component {
                 break
 
             default:
-                throw new Error(
-                    `unexpected timer state ${this.props.timing.timer}`
-                )
+                assertNever('timer state', this.props.timing.timer)
         }
 
         return (

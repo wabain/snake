@@ -3,11 +3,19 @@ import { CSSTransition } from 'react-transition-group'
 import PropTypes from 'prop-types'
 
 import snakeProps from '../prop-types/snake'
+import { SnakeState } from '../store/snake'
 
-import SnakePath from './snake-path.jsx'
-import SnakeFood from './snake-food.jsx'
+import SnakePath from './snake-path'
+import SnakeFood from './snake-food'
 
-export default class Snake extends React.Component {
+export type SnakeProps = {
+    snake: SnakeState
+    boxSize: number
+    showGrid?: boolean
+    style?: React.CSSProperties
+}
+
+export default class Snake extends React.Component<SnakeProps> {
     static get propTypes() {
         return {
             snake: snakeProps.isRequired
@@ -63,7 +71,15 @@ export default class Snake extends React.Component {
 }
 
 /** Grid for debugging */
-export function Grid({ width, height, boxSize }) {
+export function Grid({
+    width,
+    height,
+    boxSize
+}: {
+    width: number
+    height: number
+    boxSize: number
+}) {
     const strokeWidth = 1 / boxSize
     const grid = []
 

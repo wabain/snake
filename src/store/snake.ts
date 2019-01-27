@@ -1,4 +1,4 @@
-import { Direction, UP, DOWN, LEFT, RIGHT } from '../constants'
+import { Direction, UP, DOWN, LEFT, RIGHT, assertNever } from '../constants'
 import { Action, SET_DIRECTION, TICK, START, RESUME_GAME } from './actions'
 
 const WIDTH = 21
@@ -150,6 +150,9 @@ function getIncrementedCoords({ x, y }: Coordinate, direction: Direction) {
         case RIGHT:
             x++
             break
+
+        default:
+            assertNever('direction', direction)
     }
 
     return { x, y }
