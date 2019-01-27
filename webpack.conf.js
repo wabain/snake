@@ -1,14 +1,19 @@
 module.exports = {
-  entry: __dirname + '/src/index.jsx',
+    entry: __dirname + '/src/index.jsx',
 
-  output: {
-    path: __dirname + '/dist/',
-    filename: 'snake.js'
-  },
+    output: {
+        path: __dirname + '/dist/',
+        filename: 'snake.js'
+    },
 
-  module: {
-    loaders: [
-      {test: /\.js(x?)$/, loader: 'babel', exclude: /node_modules/, query: {optional: ['es7.decorators']}}
-    ]
-  }
+    module: {
+        loaders: [
+            {
+                test: /\.js(x?)$/,
+                loader: 'babel',
+                exclude: /node_modules/,
+                query: { optional: ['es7.decorators'] }
+            }
+        ]
+    }
 }

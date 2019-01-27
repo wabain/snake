@@ -1,13 +1,13 @@
 var webpack = require('webpack')
 var webpackConf = require('./webpack.conf')
 
-module.exports = function () {
+module.exports = (function() {
     var copy = {}
     for (var prop in webpackConf) {
         if (webpackConf.hasOwnProperty(prop)) copy[prop] = webpackConf[prop]
     }
     return copy
-}()
+})()
 
 module.exports = extend({}, webpackConf, {
     plugins: [
@@ -19,8 +19,8 @@ module.exports = extend({}, webpackConf, {
 })
 
 function extend(obj) {
-    Array.prototype.slice.call(arguments, 1).forEach(function (props) {
-        Object.keys(props).forEach(function (prop) {
+    Array.prototype.slice.call(arguments, 1).forEach(function(props) {
+        Object.keys(props).forEach(function(prop) {
             obj[prop] = props[prop]
         })
     })

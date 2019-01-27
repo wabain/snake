@@ -47,7 +47,9 @@ export default class Controls extends React.Component {
                 break
 
             default:
-                throw new Error(`unexpected timer state ${this.props.timing.timer}`)
+                throw new Error(
+                    `unexpected timer state ${this.props.timing.timer}`
+                )
         }
 
         return (

@@ -2,10 +2,13 @@ import React from 'react'
 import connectToStores from 'alt/utils/connectToStores'
 
 import {
-    INITIAL_WAIT_TICKS, WAIT_DECAY_RATE, TICK_DURATION,
+    INITIAL_WAIT_TICKS,
+    WAIT_DECAY_RATE,
+    TICK_DURATION,
 
     // Timer states
-    ACTIVE, TERMINATED
+    ACTIVE,
+    TERMINATED
 } from '../constants'
 
 import alt from '../alt'
@@ -23,8 +26,7 @@ const ARROW_KEYS_REGEX = /^Arrow(Up|Down|Left|Right)$/
 function getArrowDirection(key) {
     const parsed = ARROW_KEYS_REGEX.exec(key)
 
-    if (!parsed)
-        return null
+    if (!parsed) return null
 
     return parsed[1].toLowerCase()
 }
@@ -54,7 +56,11 @@ export default class App extends React.Component {
         // FIXME: is there a better place to do this?
         if (ticks !== nextTicks || (timer !== ACTIVE && nextTimer === ACTIVE)) {
             this._triggerTick(nextTicks)
-        } else if (timer === ACTIVE && nextTimer !== ACTIVE && this._timeout !== null) {
+        } else if (
+            timer === ACTIVE &&
+            nextTimer !== ACTIVE &&
+            this._timeout !== null
+        ) {
             clearTimeout(this._timeout)
             this._timeout = null
         }
@@ -75,7 +81,10 @@ export default class App extends React.Component {
 
         const timerState = this.props.timing.timer
 
-        if (timerState === ACTIVE && (arrowDirection = getArrowDirection(e.key))) {
+        if (
+            timerState === ACTIVE &&
+            (arrowDirection = getArrowDirection(e.key))
+        ) {
             // If an arrow key is pressed set the direction
             SnakeActions.setDirection(arrowDirection)
             e.preventDefault()
@@ -84,7 +93,9 @@ export default class App extends React.Component {
             if (timerState === ACTIVE) {
                 TimingActions.pause()
             } else {
-                if (timerState === TERMINATED) alt.recycle()
+                if (timerState === TERMINATED) {
+                    alt.recycle()
+                }
 
                 TimingActions.start()
             }
@@ -92,19 +103,26 @@ export default class App extends React.Component {
             e.preventDefault()
         } else if (e.key === 'M' && e.shiftKey) {
             // Secret feature: Continue game on Shift+M
-            if (this.props.snake.collided)
+            if (this.props.snake.collided) {
                 TimingActions.resumeGame()
+            }
 
             e.preventDefault()
         }
     }
 
     _triggerTick(expectedTicks) {
-        const waitTicks = Math.max(1, Math.round(INITIAL_WAIT_TICKS - expectedTicks * WAIT_DECAY_RATE))
+        const waitTicks = Math.max(
+            1,
+            Math.round(INITIAL_WAIT_TICKS - expectedTicks * WAIT_DECAY_RATE)
+        )
         const timeoutDuration = waitTicks * TICK_DURATION
 
         const timeout = setTimeout(() => {
-            if (this.props.timing.timer === ACTIVE && this.props.timing.ticks === expectedTicks) {
+            if (
+                this.props.timing.timer === ACTIVE &&
+                this.props.timing.ticks === expectedTicks
+            ) {
                 TimingActions.tick(waitTicks)
             }
 

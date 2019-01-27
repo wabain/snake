@@ -10,14 +10,14 @@ export default class SnakePath extends React.Component {
 
     render() {
         const coords = this._getCoordinates()
-
-        const display = {
-            stroke: 'red',
-            strokeWidth: 1,
-            strokeLinecap: 'square'
-        }
-
-        return <path d={coords} {...display}></path>
+        return (
+            <path
+                d={coords}
+                stroke="red"
+                strokeWidth={1}
+                strokeLinecap="square"
+            />
+        )
     }
 
     _getCoordinates() {
@@ -26,6 +26,8 @@ export default class SnakePath extends React.Component {
             return `M${x},${y} l0,0`
         }
 
-        return this.props.snake.coordinates.map(({ x, y }, i) => `${i === 0 ? 'M' : 'L'}${x},${y}`).join(' ')
+        return this.props.snake.coordinates
+            .map(({ x, y }, i) => `${i === 0 ? 'M' : 'L'}${x},${y}`)
+            .join(' ')
     }
 }

@@ -30,16 +30,18 @@ export default class TimingStore {
     }
 
     onResumeGame() {
-        if (this.state.timer === TERMINATED)
+        if (this.state.timer === TERMINATED) {
             this.setState({ timer: PAUSED })
+        }
     }
 
     onTick(ticks) {
         this.waitFor(SnakeStore.dispatchToken)
 
-        if (SnakeStore.getState().collided)
+        if (SnakeStore.getState().collided) {
             this.setState({ timer: TERMINATED })
-        else
+        } else {
             this.setState({ ticks: this.state.ticks + ticks })
+        }
     }
 }
