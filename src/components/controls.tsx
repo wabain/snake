@@ -3,8 +3,6 @@ import React from 'react'
 import { READY, ACTIVE, PAUSED, TERMINATED, assertNever } from '../constants'
 import { TimingState } from '../store/timing'
 
-import timingProps from '../prop-types/timing'
-
 // XXX Circular?
 import { DispatchCallbacks } from './app'
 
@@ -18,12 +16,6 @@ export type ControlsProps = {
  * TODO: add help here?
  */
 export default class Controls extends React.Component<ControlsProps> {
-    static get propTypes() {
-        return {
-            timing: timingProps
-        }
-    }
-
     render() {
         let handler, message
 

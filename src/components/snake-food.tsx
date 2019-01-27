@@ -1,5 +1,4 @@
 import React from 'react'
-import PropTypes from 'prop-types'
 
 export type SnakeFoodProps = {
     x: number
@@ -7,13 +6,6 @@ export type SnakeFoodProps = {
 }
 
 export default class SnakeFood extends React.Component<SnakeFoodProps> {
-    static get propTypes() {
-        return {
-            x: PropTypes.number.isRequired,
-            y: PropTypes.number.isRequired
-        }
-    }
-
     render() {
         const coords = `M${this.props.x},${this.props.y} l0,0`
         return (

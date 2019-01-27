@@ -1,8 +1,6 @@
 import React from 'react'
 import { CSSTransition } from 'react-transition-group'
-import PropTypes from 'prop-types'
 
-import snakeProps from '../prop-types/snake'
 import { SnakeState } from '../store/snake'
 
 import SnakePath from './snake-path'
@@ -16,12 +14,6 @@ export type SnakeProps = {
 }
 
 export default class Snake extends React.Component<SnakeProps> {
-    static get propTypes() {
-        return {
-            snake: snakeProps.isRequired
-        }
-    }
-
     render() {
         const { width: hBoxes, height: vBoxes } = this.props.snake.container
 
@@ -114,10 +106,4 @@ export function Grid({
     }
 
     return <g>{grid}</g>
-}
-
-Grid.propTypes = {
-    width: PropTypes.number.isRequired,
-    height: PropTypes.number.isRequired,
-    boxSize: PropTypes.number.isRequired
 }
