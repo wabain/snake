@@ -43,16 +43,20 @@
                 background: #09d;
             }
 
-            .overlay {
-                opacity: 0.5;
+            /* Gameover overlay states. CSS precedence matters! */
+            .gameover-overlay {
+                opacity: 0;
             }
-
             .gameover-enter {
                 transition: opacity 0.5s;
                 opacity: 0;
             }
-            .gameover-enter.gameover-enter-active {
+            .gameover-enter.gameover-enter-active,
+            .gameover-enter-done {
                 opacity: 0.5;
+            }
+            .gameover-exit-done {
+                opacity: 0;
             }
         </style>
     </head>

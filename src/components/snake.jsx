@@ -1,5 +1,5 @@
 import React from 'react'
-import CSSTransitionGroup from 'react/lib/ReactCSSTransitionGroup'
+import { CSSTransition } from 'react-transition-group'
 import PropTypes from 'prop-types'
 
 import snakeProps from '../prop-types/snake'
@@ -34,23 +34,6 @@ export default class Snake extends React.Component {
             <Grid width={vBoxes} height={hBoxes} boxSize={this.props.boxSize} />
         ) : null
 
-        // Fade out the overlay when the game ends
-        let overlay
-        if (this.props.snake.collided) {
-            overlay = (
-                <rect
-                    key="overlay"
-                    className="overlay"
-                    x={x}
-                    y={y}
-                    width={hBoxes}
-                    height={vBoxes}
-                />
-            )
-        } else {
-            overlay = null
-        }
-
         return (
             <svg
                 version="1.1"
@@ -60,14 +43,20 @@ export default class Snake extends React.Component {
                 <SnakePath {...this.props} />
                 {food}
                 {grid}
-                <CSSTransitionGroup
-                    transitionName="gameover"
-                    transitionEnterTimeout={500}
-                    transitionLeave={false}
-                    component="g"
+                <CSSTransition
+                    in={this.props.snake.collided}
+                    classNames="gameover"
+                    timeout={{ enter: 500 }}
+                    exit={false}
                 >
-                    {overlay}
-                </CSSTransitionGroup>
+                    <rect
+                        className="gameover-overlay"
+                        x={x}
+                        y={y}
+                        width={hBoxes}
+                        height={vBoxes}
+                    />
+                </CSSTransition>
             </svg>
         )
     }
