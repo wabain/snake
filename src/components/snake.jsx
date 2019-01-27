@@ -1,5 +1,6 @@
-import React, { PropTypes } from 'react'
+import React from 'react'
 import CSSTransitionGroup from 'react/lib/ReactCSSTransitionGroup'
+import PropTypes from 'prop-types'
 
 import snakeProps from '../prop-types/snake'
 

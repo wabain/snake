@@ -1,4 +1,4 @@
-import { PropTypes } from 'react'
+import PropTypes from 'prop-types'
 import { UP, RIGHT, DOWN, LEFT } from '../constants'
 
 const coordinateType = PropTypes.shape({

@@ -1,10 +1,11 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 
 export default class SnakeFood extends React.Component {
     static get propTypes() {
         return {
-            x: React.PropTypes.number.isRequired,
-            y: React.PropTypes.number.isRequired
+            x: PropTypes.number.isRequired,
+            y: PropTypes.number.isRequired
         }
     }
 
