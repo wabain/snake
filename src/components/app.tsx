@@ -8,7 +8,6 @@ import {
 
     // Timer states
     ACTIVE,
-    TERMINATED,
     Direction
 } from '../constants'
 

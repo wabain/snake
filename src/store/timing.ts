@@ -1,5 +1,5 @@
 import { TimerState, READY, ACTIVE, PAUSED, TERMINATED } from '../constants'
-import { Action, START, PAUSE, TICK, TERMINATE, RESUME_GAME } from './actions'
+import { Action, START, PAUSE, TICK, RESUME_GAME } from './actions'
 
 export type TimingState = {
     timer: TimerState
@@ -24,9 +24,6 @@ export default function reduceTiming(
 
         case PAUSE:
             return Object.assign({}, state, { timer: PAUSED })
-
-        case TERMINATE:
-            return Object.assign({}, state, { timer: TERMINATED })
 
         case RESUME_GAME:
             return state.timer == TERMINATED
