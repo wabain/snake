@@ -1,15 +1,7 @@
-var webpack = require('webpack')
-var webpackConf = require('./webpack.conf')
+const webpack = require('webpack')
+const webpackConf = require('./webpack.conf')
 
-module.exports = (function() {
-    var copy = {}
-    for (var prop in webpackConf) {
-        if (webpackConf.hasOwnProperty(prop)) copy[prop] = webpackConf[prop]
-    }
-    return copy
-})()
-
-module.exports = extend({}, webpackConf, {
+module.exports = Object.assign({}, webpackConf, {
     plugins: [
         new webpack.DefinePlugin({
             'process.env': { NODE_ENV: JSON.stringify('production') }
@@ -17,12 +9,3 @@ module.exports = extend({}, webpackConf, {
         new webpack.optimize.UglifyJsPlugin({ compressor: { warnings: false } })
     ]
 })
-
-function extend(obj) {
-    Array.prototype.slice.call(arguments, 1).forEach(function(props) {
-        Object.keys(props).forEach(function(prop) {
-            obj[prop] = props[prop]
-        })
-    })
-    return obj
-}
