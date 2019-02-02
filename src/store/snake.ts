@@ -14,6 +14,8 @@ export type SnakeState = {
     collided: boolean
     started: boolean
     direction: Direction
+    requestMoveX: 'left' | 'right' | null
+    requestMoveY: 'up' | 'down' | null
     coordinates: Coordinate[]
     food: Coordinate[]
 }
@@ -23,6 +25,8 @@ const initialState: SnakeState = {
     collided: false,
     started: false,
     direction: RIGHT,
+    requestMoveX: null,
+    requestMoveY: null,
     coordinates: [{ x: Math.floor(WIDTH / 2), y: Math.floor(HEIGHT / 2) }],
     food: []
 }
@@ -43,7 +47,22 @@ export default function reduceSnake(
     switch (action.type) {
         case SET_DIRECTION:
             const { direction } = action.payload
-            return Object.assign({}, state, { direction })
+            switch (direction) {
+                case LEFT:
+                case RIGHT:
+                    return Object.assign({}, state, {
+                        direction,
+                        requestMoveX: direction
+                    })
+                case UP:
+                case DOWN:
+                    return Object.assign({}, state, {
+                        direction,
+                        requestMoveY: direction
+                    })
+                default:
+                    assertNever('direction', direction)
+            }
 
         case TICK:
             return handleTick(state)
@@ -74,10 +93,25 @@ function loadInitialFood(state: SnakeState) {
 }
 
 function handleTick(state: SnakeState) {
-    let { container, coordinates, direction } = state
+    let {
+        container,
+        coordinates,
+        direction,
+        requestMoveX,
+        requestMoveY
+    } = state
 
     // Get the coordinates shifted one tick in the direction
-    const newCoords = getIncrementedCoords(coordinates[0], direction)
+    let newCoords
+    if (requestMoveX || requestMoveY) {
+        newCoords = coordinates[0]
+        if (requestMoveX)
+            newCoords = getIncrementedCoords(newCoords, requestMoveX)
+        if (requestMoveY)
+            newCoords = getIncrementedCoords(newCoords, requestMoveY)
+    } else {
+        newCoords = getIncrementedCoords(coordinates[0], direction)
+    }
     const { x, y } = newCoords
 
     if (
@@ -92,7 +126,7 @@ function handleTick(state: SnakeState) {
 
     coordinates = [newCoords, ...coordinates]
 
-    let foodIndex = null
+    let foodIndex: number | null = null
 
     state.food.some((morsel, i) => {
         if (morsel.x === x && morsel.y === y) {
@@ -103,16 +137,23 @@ function handleTick(state: SnakeState) {
 
     // If there is no food then the snake moves forward. Otherwise, it is
     // extended with the food.
+    let food
+
     if (foodIndex === null) {
+        food = state.food
+
         coordinates.pop()
-
-        return Object.assign({}, state, { coordinates })
     } else {
-        const food = state.food.slice()
-        food.splice(foodIndex, 1, getFoodPiece(state))
-
-        return Object.assign({}, state, { food, coordinates })
+        food = state.food.slice()
+        food[foodIndex] = getFoodPiece(state)
     }
+
+    return Object.assign({}, state, {
+        food,
+        coordinates,
+        requestMoveX: null,
+        requestMoveY: null
+    })
 }
 
 function getFoodPiece({ container, coordinates, food }: SnakeState) {
