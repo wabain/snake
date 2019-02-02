@@ -3,8 +3,8 @@ import { connect } from 'react-redux'
 
 import {
     INITIAL_WAIT_TICKS,
-    WAIT_DECAY_RATE,
-    TICK_DURATION,
+    TICK_DECAY_EXPONENT,
+    TICK_DURATION_MS,
 
     // Timer states
     ACTIVE,
@@ -152,9 +152,12 @@ class App extends React.Component<AppPropTypes> {
     _triggerTick(expectedTicks: number) {
         const waitTicks = Math.max(
             1,
-            Math.round(INITIAL_WAIT_TICKS - expectedTicks * WAIT_DECAY_RATE)
+            Math.round(
+                INITIAL_WAIT_TICKS -
+                    Math.pow(expectedTicks, TICK_DECAY_EXPONENT)
+            )
         )
-        const timeoutDuration = waitTicks * TICK_DURATION
+        const timeoutDuration = waitTicks * TICK_DURATION_MS
 
         const timeout = setTimeout(() => {
             if (
