@@ -69,19 +69,31 @@ function bindDispatch(dispatch: any): DispatchCallbacks {
 }
 
 class App extends React.Component<AppPropTypes> {
+    _handleKeydownBound: (e: KeyboardEvent) => void
     _timeout: number | null
 
     constructor(props: AppPropTypes) {
         super(props)
+
+        this._handleKeydownBound = e => this._handleKeydown(e)
+
         // Don't put the timeout in state because setting/unsetting it shouldn't trigger a rerender
         this._timeout = null
+    }
+
+    componentDidMount() {
+        document.addEventListener('keydown', this._handleKeydownBound)
+    }
+
+    componentWillUnmount() {
+        document.removeEventListener('keydown', this._handleKeydownBound)
     }
 
     componentWillReceiveProps(nextProps: AppPropTypes) {
         const { timer, ticks } = this.props.timing
         const { timer: nextTimer, ticks: nextTicks } = nextProps.timing
 
-        // Start the timeout for the next tick whenever the timingis activated or the tick
+        // Start the timeout for the next tick whenever the timing is activated or the tick
         // increments
         // FIXME: is there a better place to do this?
         if (ticks !== nextTicks || (timer !== ACTIVE && nextTimer === ACTIVE)) {
@@ -99,14 +111,14 @@ class App extends React.Component<AppPropTypes> {
     render() {
         // TODO: listen for swipe gestures to support touch interfaces?
         return (
-            <div onKeyDown={e => this._handleKeydown(e)} tabIndex={0}>
+            <React.Fragment>
                 <Snake boxSize={25} {...this.props} />
                 <Controls {...this.props} />
-            </div>
+            </React.Fragment>
         )
     }
 
-    _handleKeydown(e: React.KeyboardEvent) {
+    _handleKeydown(e: KeyboardEvent) {
         let arrowDirection: Direction
 
         const timerState = this.props.timing.timer
